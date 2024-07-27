@@ -1,8 +1,17 @@
-(projectId as text) =>
+(region as text, projectId as text) =>
     let
-        foldersAsJson = Json.Document(
-            Web.Contents("https://app21.connect.trimble.com/tc/api/2.0/folders/" & projectId & "/items")
-        ),
-        #"Table" = Table.FromRecords(foldersAsJson,{"name", "id", "type", "size"})
+        uri =
+            if Text.Contains(region, "North America") then
+                "https://app.connect.trimble.com/tc/api/2.0/"
+            else if Text.Contains(region, "Europe") then
+                "https://app21.connect.trimble.com/tc/api/2.0/"
+            else if Text.Contains(region, "Asia") then
+                "https://app31.connect.trimble.com/tc/api/2.0/"
+            else if Text.Contains(region, "Australia") then
+                "https://app32.connect.trimble.com/tc/api/2.0/"
+            else
+                error "Unknown region",
+        foldersAsJson = Json.Document(Web.Contents(uri & "folders/" & projectId & "/items")),
+        #"Table" = Table.FromRecords(foldersAsJson, {"name", "id", "type", "size"})
     in
         #"Table"

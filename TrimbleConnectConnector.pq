@@ -150,7 +150,7 @@ TrimbleConnectConnector = [
 
 GetFolderContent = (region as text, folderId as text) =>
     let
-        folderItems = GetFolderItemsQuery(folderId),
+        folderItems = GetFolderItemsQuery(region, folderId),
         withDataColumn = Table.AddColumn(
             folderItems,
             "Data",
