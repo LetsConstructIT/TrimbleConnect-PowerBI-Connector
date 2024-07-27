@@ -1,0 +1,8 @@
+(projectId as text) =>
+    let
+        foldersAsJson = Json.Document(
+            Web.Contents("https://app21.connect.trimble.com/tc/api/2.0/folders/" & projectId & "/items")
+        ),
+        #"Table" = Table.FromRecords(foldersAsJson,{"name", "id", "type", "size"})
+    in
+        #"Table"

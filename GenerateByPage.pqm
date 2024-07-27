@@ -1,0 +1,18 @@
+(getNextPage as function, optional tableType as type) as table =>
+    let
+        listOfPages = List.Generate(
+            () => getNextPage(null), (lastPage) => lastPage <> null, (lastPage) => getNextPage(lastPage)
+        ),
+        tableOfPages = Table.FromList(listOfPages, Splitter.SplitByNothing(), {"Column1"}),
+        firstRow = tableOfPages{0} ?,
+        keys =
+            if tableType = null then
+                Table.ColumnNames(firstRow[Column1])
+            else
+                Record.FieldNames(Type.RecordFields(Type.TableRow(tableType))),
+        appliedType = if tableType = null then Value.Type(firstRow[Column1]) else tableType
+    in
+        if tableType = null and firstRow = null then
+            Table.FromRows({})
+        else
+            Value.ReplaceType(Table.ExpandTableColumn(tableOfPages, "Column1", keys), appliedType)

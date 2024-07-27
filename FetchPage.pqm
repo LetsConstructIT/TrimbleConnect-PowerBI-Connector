@@ -1,0 +1,8 @@
+(url as text, pageSize as number, skipRows as number) as table =>
+    let
+        queriedUrl = url & "&top=" & Text.From(pageSize) & "&offset=" & Text.From(skipRows),
+        json = Json.Document(Web.Contents(queriedUrl)),
+        table = Table.FromList(json[items], Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+        tableWithMeta = table meta [skipRows = json[offsetNext], total = json[total]]
+    in
+        tableWithMeta

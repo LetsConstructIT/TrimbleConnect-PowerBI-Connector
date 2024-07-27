@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="BuildMez">
+  <PropertyGroup>
+    <OutputPath Condition="'$(OutputPath)' == ''">$(MSBuildProjectDirectory)\bin\AnyCPU\Debug\</OutputPath>
+    <IntermediateOutputPath Condition="'$(IntermediateOutputPath)' == ''">$(MSBuildProjectDirectory)\obj\</IntermediateOutputPath>
+    <MezIntermediatePath>$(IntermediateOutputPath)MEZ\</MezIntermediatePath>
+    <MezOutputPath>$(OutputPath)$(MsBuildProjectName).mez</MezOutputPath>
+	<PowerBiDestination>C:\Users\$(UserName)\Documents\Power BI Desktop\Custom Connectors\</PowerBiDestination>
+  </PropertyGroup>
+  <ItemGroup>
+    <MezContent Include="Authorization.json" />
+    <MezContent Include="FetchPage.pqm" />
+    <MezContent Include="GenerateByPage.pqm" />
+    <MezContent Include="GetFolderItemsQuery.pqm" />
+    <MezContent Include="GetProjectsQuery.pqm" />
+    <MezContent Include="TrimbleConnectConnector.pq" />
+    <MezContent Include="TrimbleConnectConnector16.png" />
+    <MezContent Include="TrimbleConnectConnector20.png" />
+    <MezContent Include="TrimbleConnectConnector24.png" />
+    <MezContent Include="TrimbleConnectConnector32.png" />
+    <MezContent Include="TrimbleConnectConnector40.png" />
+    <MezContent Include="TrimbleConnectConnector48.png" />
+    <MezContent Include="TrimbleConnectConnector64.png" />
+    <MezContent Include="TrimbleConnectConnector80.png" />
+    <MezContent Include="resources.resx" />
+  </ItemGroup>
+  <Target Name="BuildMez" AfterTargets="Build" Inputs="@(MezContent)" Outputs="$(MezOutputPath)">
+    <RemoveDir Directories="$(MezIntermediatePath)" />
+    <Copy SourceFiles="@(MezContent)" DestinationFolder="$(MezIntermediatePath)" />
+    <MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
+    <ZipDirectory SourceDirectory="$(MezIntermediatePath)" DestinationFile="$(MezOutputPath)" Overwrite="true" />
+    <Copy SourceFiles="$(MezOutputPath)" DestinationFolder="$(PowerBiDestination)" />
+  </Target>
+  <Target Name="Clean">
+    <RemoveDir Directories="$(MezIntermediatePath)" />
+    <Delete Files="$(MezOutputPath)" />
+  </Target>
+</Project>

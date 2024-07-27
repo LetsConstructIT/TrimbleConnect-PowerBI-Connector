@@ -1,0 +1,67 @@
+(region as text) =>
+    let
+        uri =
+            if Text.Contains(region, "North America") then
+                "https://app.connect.trimble.com/tc/api/2.0/"
+            else if Text.Contains(region, "Europe") then
+                "https://app21.connect.trimble.com/tc/api/2.0/"
+            else if Text.Contains(region, "Asia") then
+                "https://app31.connect.trimble.com/tc/api/2.0/"
+            else if Text.Contains(region, "Australia") then
+                "https://app32.connect.trimble.com/tc/api/2.0/"
+            else
+                error "Unknown region",
+        projectsAsJson = Json.Document(Web.Contents(uri&"projects")),
+        #"Converted to Table" = Table.FromList(
+            projectsAsJson, Splitter.SplitByNothing(), null, null, ExtraValues.Error
+        ),
+        #"Projects Table" = Table.ExpandRecordColumn(
+            #"Converted to Table",
+            "Column1",
+            {
+                "id",
+                "name",
+                "rootId",
+                "thumbnail",
+                "location",
+                "lastVisitedOn",
+                "modifiedOn",
+                "createdOn",
+                "createdBy",
+                "modifiedBy",
+                "updatedOn",
+                "updatedBy",
+                "size",
+                "filesCount",
+                "foldersCount",
+                "versionsCount",
+                "usersCount",
+                "license",
+                "access",
+                "description"
+            },
+            {
+                "id",
+                "name",
+                "rootId",
+                "thumbnail",
+                "location",
+                "lastVisitedOn",
+                "modifiedOn",
+                "createdOn",
+                "createdBy",
+                "modifiedBy",
+                "updatedOn",
+                "updatedBy",
+                "size",
+                "filesCount",
+                "foldersCount",
+                "versionsCount",
+                "usersCount",
+                "license",
+                "access",
+                "description"
+            }
+        )
+    in
+        #"Projects Table"

@@ -1,0 +1,10 @@
+{
+  "trimbleConnect": {
+    "authorizeUrl": "https://id.trimble.com/oauth/authorize",
+    "tokenUrl": "https://id.trimble.com/oauth/token",
+    "redirectUrl": "https://oauth.powerbi.com/views/oauthredirect.html",
+    "clientId": "06475b72-ed21-4925-b3dd-d3fcc9017b2e",
+    "clientSecret": "9bd4b80db7734b13a1b1780fd0945ea6",
+    "scope": "openid ProductivityTools"
+  }
+}
